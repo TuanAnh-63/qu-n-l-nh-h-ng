@@ -1,0 +1,288 @@
+/* THEME MÀU NỒI LẨU (ĐỎ - CAM - VÀNG) - LOGIN & REGISTER */
+:root {
+    --primary-color: #e63946;     
+    --primary-dark: #c1121f;      
+    --accent-orange: #f77f00;     
+    --accent-yellow: #fcbf49;     
+    --bg-gradient: linear-gradient(135deg, #1a0f0f 0%, #2b110c 50%, #1a0806 100%); 
+    --card-bg: rgba(255, 255, 255, 0.96);
+    --text-color: #2b2d42;
+    --text-muted: #6c757d;
+    --border-color: #ffe5d9;
+    --focus-shadow: rgba(247, 127, 0, 0.25);
+    --error-color: #d62828;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-gradient);
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+
+body::before {
+    content: '';
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(247,127,0,0.35) 0%, rgba(230,57,70,0) 70%);
+    top: 10%;
+    left: 15%;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(252,191,73,0.3) 0%, rgba(230,57,70,0) 70%);
+    bottom: 10%;
+    right: 15%;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+}
+
+/* --- KHUNG FORM CHÍNH (CARD) --- */
+.auth-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
+                0 0 15px rgba(247, 127, 0, 0.2);
+    padding: 35px 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(252, 191, 73, 0.3);
+}
+
+/* TAB CHUYỂN ĐỔI (ĐĂNG NHẬP / ĐĂNG KÝ)  */
+.auth-header {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+}
+
+/* --- NỘI DUNG FORM --- */
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-form h2 {
+    color: var(--primary-dark);
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 22px;
+    letter-spacing: -0.5px;
+}
+
+/* CÁC Ô NHẬP LIỆU (INPUT GROUPS) */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 6px;
+}
+
+.required-star {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-box .icon {
+    position: absolute;
+    left: 14px;
+    color: var(--accent-orange);
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 40px 12px 42px;
+    font-size: 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    background-color: #ffffff;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.input-box input:focus {
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 4px var(--focus-shadow);
+}
+
+.input-box input:focus + .icon,
+.input-box input:focus ~ .icon {
+    color: var(--primary-color);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: var(--accent-orange);
+}
+
+/* Thông báo lỗi nhỏ dưới input */
+.error-text {
+    display: block;
+    color: var(--error-color);
+    font-size: 12px;
+    margin-top: 5px;
+    min-height: 16px;
+}
+
+/*  THÔNG BÁO LỖI CHUNG (ALERT BOX)  */
+.alert-box {
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-box.danger {
+    background-color: #ffe5e5;
+    border: 1px solid #ffb3b3;
+    color: var(--primary-dark);
+}
+
+.alert-box.hidden {
+    display: none;
+}
+
+/*  GHI NHỚ & QUÊN MẬT KHẨU  */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    margin-bottom: 22px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--primary-color);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.forgot-pass {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.forgot-pass:hover {
+    color: var(--accent-orange);
+    text-decoration: underline;
+}
+
+/*  NÚT SUBMIT (GỬI FORM) */
+.btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-orange) 50%, var(--accent-yellow) 100%);
+    background-size: 200% auto;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.35);
+}
+
+.btn-submit:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(247, 127, 0, 0.45);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}

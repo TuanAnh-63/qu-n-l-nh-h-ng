@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Liên hệ nhà hàng Lẩu 4 Mùa: địa chỉ, số điện thoại, email, giờ mở cửa và biểu mẫu gửi tin nhắn.">
+    <title>Liên hệ - Lẩu 4 Mùa</title>
+    <link rel="stylesheet" href="lienhe.css">
+    <script src="lienhe.js" defer></script>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">Lẩu 4 Mùa</a>
+        </div>
+        <nav class="navbar" aria-label="Điều hướng chính">
+            <a href="index.html">Trang chủ</a>
+            <a href="gioithieu.html">Giới thiệu</a>
+            <a href="menu.html">Thực đơn</a>
+            <a href="datban.html">Đặt bàn</a>
+            <a href="lienhe.html" class="active" aria-current="page">Liên hệ</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-section">
+            <div class="contact-title">
+                <span>KẾT NỐI VỚI CHÚNG TÔI</span>
+                <h1>Liên hệ</h1>
+                <p>Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu nào, hãy liên hệ với nhà hàng qua các thông tin dưới đây.</p>
+            </div>
+
+            <div class="contact-layout">
+                <!-- CỘT TRÁI: THÔNG TIN + BẢN ĐỒ -->
+                <div class="contact-info">
+                    <section class="info-box" aria-labelledby="info-heading">
+                        <h2 id="info-heading">Thông tin nhà hàng</h2>
+
+                        <div class="info-item">
+                            <strong>Địa chỉ</strong>
+                            <p>123 Đường Tràng Tiền, Hoàn Kiếm, Hà Nội</p>
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Số điện thoại</strong>
+                            <p><a href="tel:0898879669">0898 879 669</a></p>
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Email</strong>
+                            <p><a href="mailto:booking@lau4mua.com">booking@lau4mua.com</a></p>
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Giờ mở cửa</strong>
+                            <p>Thứ 2 - Thứ 6: 10:30 - 23:00<br>Thứ 7 - Chủ Nhật: 10:00 - 24:00</p>
+                        </div>
+                    </section>
+
+                    <section class="map-box" aria-labelledby="map-heading">
+                        <h2 id="map-heading">Vị trí nhà hàng</h2>
+                        <div class="map-frame">
+                            <iframe
+                                title="Bản đồ vị trí Lẩu 4 Mùa"
+                                src="https://www.google.com/maps?q=123+Tr%C3%A0ng+Ti%E1%BB%81n,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&output=embed"
+                                loading="lazy"
+                                allowfullscreen
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- CỘT PHẢI: FORM -->
+                <section class="contact-box" aria-labelledby="form-heading">
+                    <h2 id="form-heading">Gửi tin nhắn cho chúng tôi</h2>
+
+                    <form id="contact-form" action="#" method="post" novalidate>
+                        <div class="form-group">
+                            <label for="name">Họ và tên <span class="required">*</span></label>
+                            <input type="text" id="name" name="name"
+                                   placeholder="Nhập họ và tên" autocomplete="name"
+                                   minlength="2" maxlength="100" required>
+                            <div class="invalid-feedback">Vui lòng nhập họ và tên (tối thiểu 2 ký tự).</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email"
+                                       placeholder="Nhập email của bạn" autocomplete="email"
+                                       maxlength="100" required>
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại</label>
+                                <input type="tel" id="phone" name="phone"
+                                       placeholder="Ví dụ: 0912345678" autocomplete="tel"
+                                       inputmode="numeric" pattern="(03|05|07|08|09)[0-9]{8}" maxlength="10"
+                                       title="Số điện thoại gồm 10 chữ số, bắt đầu bằng 03, 05, 07, 08 hoặc 09">
+                                <div class="invalid-feedback">Số điện thoại gồm 10 chữ số, bắt đầu bằng 03, 05, 07, 08 hoặc 09.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Chủ đề <span class="required">*</span></label>
+                            <select id="subject" name="subject" required>
+                                <option value="">-- Chọn chủ đề --</option>
+                                <option value="dat-ban">Đặt bàn</option>
+                                <option value="gop-y">Góp ý</option>
+                                <option value="khieu-nai">Khiếu nại</option>
+                                <option value="khac">Khác</option>
+                            </select>
+                            <div class="invalid-feedback">Vui lòng chọn chủ đề.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Nội dung <span class="required">*</span></label>
+                            <textarea id="message" name="message" rows="6"
+                                      placeholder="Nhập nội dung tin nhắn..."
+                                      minlength="10" maxlength="1000" required></textarea>
+                            <div class="invalid-feedback">Nội dung cần từ 10 đến 1000 ký tự.</div>
+                            <div class="char-count" id="char-count">0/1000</div>
+                        </div>
+
+                        <!-- Honeypot chống bot: người thật không thấy, bot thường tự điền -->
+                        <div class="hp" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+
+                        <div class="form-button">
+                            <button type="submit" id="submit-btn">
+                                <span class="btn-text">Gửi tin nhắn</span>
+                            </button>
+                        </div>
+                        <p class="form-note"><span class="required">*</span> Thông tin bắt buộc</p>
+                    </form>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <h2>Lẩu 4 Mùa</h2>
+            <p>Thiên đường lẩu ngon — nơi gắn kết những khoảnh khắc.</p>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Lẩu 4 Mùa. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

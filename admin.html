@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin F&B - Quản Lý Hệ Thống</title>
+    <link rel="stylesheet" href="css_admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Admin F&B</span>
+            </div>
+            <nav class="menu">
+                <a href="javascript:void(0)" class="menu-item active" id="menu-dashboard" onclick="switchAdminTab('dashboard', this)">
+                    <i class="fa-solid fa-chart-line"></i> Tổng quan
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-dishes" onclick="switchAdminTab('dishes', this)">
+                    <i class="fa-solid fa-bowl-food"></i> Quản lý món ăn
+                </a>
+                
+                <a href="javascript:void(0)" class="menu-item" id="menu-tables" onclick="switchAdminTab('tables', this)">
+                    <i class="fa-solid fa-chair"></i> Quản lý đặt bàn
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-floor" onclick="switchAdminTab('floor', this)">
+                    <i class="fa-solid fa-table-cells-large"></i> Quản lý bàn
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-orders" onclick="switchAdminTab('orders', this)">
+                    <i class="fa-solid fa-receipt"></i> Quản lý đơn hàng
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-reports" onclick="switchAdminTab('reports', this)">
+                    <i class="fa-solid fa-chart-column"></i> Báo cáo doanh thu
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-contacts" onclick="switchAdminTab('contacts', this)">
+                    <i class="fa-solid fa-envelope"></i> Tin nhắn liên hệ
+                </a>
+                <a href="javascript:void(0)" class="menu-item" id="menu-users" onclick="switchAdminTab('users', this)">
+                    <i class="fa-solid fa-users"></i> Quản lý tài khoản
+                </a>
+            </nav>
+            <div class="logout-btn">
+                <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="pageTitle">Tổng Quan Hệ Thống</h1>
+                <div class="user-profile">
+                    <i class="fa-solid fa-circle-user avatar"></i>
+                    <span id="adminName">Quản Trị Viên</span>
+                </div>
+            </header>
+
+            <!-- TAB 1: TỔNG QUAN -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="statBookingsCount">0</h3>
+                        <p>Đơn đặt bàn hôm nay</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="statDishesCount">0</h3>
+                        <p>Món ăn trong Menu</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="statUsersCount">0</h3>
+                        <p>Khách hàng đăng ký</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="statRevenue">0đ</h3>
+                        <p>Doanh thu hôm nay</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 25px;">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Hoạt Động Gần Đây</h3>
+                    <p style="color: #666; margin-top: 10px; font-size: 14px;" id="statActivityText">Đang tải dữ liệu hoạt động...</p>
+                </div>
+            </section>
+
+            <!-- TAB 2: QUẢN LÝ MÓN ĂN -->
+            <section id="tab-dishes" class="tab-content" style="display: none;">
+                <div class="content-grid">
+                    <div class="card table-card">
+                        <h3><i class="fa-solid fa-list"></i> Danh Sách Món Ăn</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên Món</th>
+                                    <th>Danh Mục</th>
+                                    <th>Giá Bán</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dishTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="card form-card">
+                        <h3 id="formDishTitle"><i class="fa-solid fa-plus-circle"></i> Thêm Món Ăn Mới</h3>
+                        <form id="addDishForm">
+                            <input type="hidden" id="editDishId" value="">
+                            <div class="form-group">
+                                <label>Tên Món Ăn *</label>
+                                <input type="text" id="dishName" placeholder="Nhập tên món..." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Danh Mục *</label>
+                            
+                                <select id="dishCategory" required>
+                                    <option value="Lẩu Thái">Lẩu Thái</option>
+                                    <option value="Lẩu Riêu Cua">Lẩu Riêu Cua</option>
+                                    <option value="Lẩu Kim Chi">Lẩu Kim Chi</option>
+                                    <option value="Lẩu Nấm">Lẩu Nấm</option>
+                                    <option value="Combo Nướng">Combo Nướng</option>
+                                    <option value="Thịt nhúng lẩu">Thịt nhúng lẩu</option>
+                                    <option value="Rau - Nấm - Viên - Mì">Rau - Nấm - Viên - Mì</option>
+                                    <option value="Nước lẩu">Nước lẩu</option>
+                                    <option value="Tráng miệng">Tráng miệng</option>
+                                    <option value="Đồ uống">Đồ uống</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Giá Bán (VNĐ) *</label>
+                                <input type="number" id="dishPrice" placeholder="Nhập giá bán (>0)..." min="1">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Size / Combo &amp; giá theo size (không bắt buộc)</label>
+                                <textarea id="dishOptions" rows="3" placeholder="Mỗi dòng một size: Tên | Giá&#10;Size M (200g) | 80000&#10;Size L (300g) | 120000"></textarea>
+                                <small style="color:#888;">Nếu nhập size, giá bán ở trên sẽ lấy theo size đầu tiên.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Mô Tả</label>
+                                <textarea id="dishDesc" rows="3" maxlength="1000" placeholder="Mô tả món ăn..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ảnh Món Ăn</label>
+                                <input type="file" id="dishImage" accept="image/*">
+                                <div id="dishImagePreview" style="display:none; margin-top:8px;">
+                                    <img id="dishImagePreviewImg" alt="Xem trước" class="dish-img-preview">
+                                    <button type="button" id="btnClearImage" class="btn-delete" style="margin-top:6px;">Xóa ảnh</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Trạng Thái *</label>
+                                <select id="dishStatus">
+                                    <option value="Còn hàng">Còn hàng</option>
+                                    <option value="Hết hàng">Hết hàng</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn-submit" id="btnDishSubmit"><i class="fa-solid fa-floppy-disk"></i> Lưu Món Ăn</button>
+                            <button type="button" class="btn-delete" id="btnCancelEdit" style="display:none; width:100%; margin-top:5px; background:#6c757d;">Hủy Chỉnh Sửa</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: QUẢN LÝ ĐẶT BÀN -->
+            <section id="tab-tables" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3><i class="fa-solid fa-calendar-check"></i> Danh Sách Khách Hàng Đặt Bàn</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ Và Tên Khách</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Ngày Giờ Đặt</th>
+                                <th>Số Lượng Khách</th>
+                                <th>Thông Tin Thêm</th>
+                                <th>Bàn</th>
+                                <th>Trạng Thái</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB: QUẢN LÝ BÀN -->
+            <section id="tab-floor" class="tab-content" style="display: none;">
+                <div class="content-grid">
+                    <div class="card table-card">
+                        <h3><i class="fa-solid fa-table-cells-large"></i> Danh Sách Bàn</h3>
+                        <p id="floorSummary" style="color:#666; font-size:14px; margin:10px 0;"></p>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tên Bàn</th>
+                                    <th>Khu Vực</th>
+                                    <th>Sức Chứa</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="floorTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="card form-card">
+                        <h3 id="formFloorTitle"><i class="fa-solid fa-plus-circle"></i> Thêm Bàn Mới</h3>
+                        <form id="floorForm">
+                            <input type="hidden" id="editFloorId" value="">
+                            <div class="form-group">
+                                <label>Tên Bàn *</label>
+                                <input type="text" id="floorName" placeholder="VD: Bàn 13" maxlength="30" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Khu Vực *</label>
+                                <select id="floorArea">
+                                    <option value="Tầng 1">Tầng 1</option>
+                                    <option value="Tầng 2">Tầng 2</option>
+                                    <option value="Phòng VIP">Phòng VIP</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sức Chứa (người) *</label>
+                                <input type="number" id="floorCapacity" min="1" max="50" value="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Trạng Thái</label>
+                                <select id="floorStatus">
+                                    <option value="Trống">Trống</option>
+                                    <option value="Đã đặt">Đã đặt</option>
+                                    <option value="Đang dùng">Đang dùng</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-submit" id="btnFloorSubmit"><i class="fa-solid fa-floppy-disk"></i> Lưu Bàn</button>
+                            <button type="button" class="btn-delete" id="btnCancelFloorEdit" style="display:none; width:100%; margin-top:5px; background:#6c757d;">Hủy Chỉnh Sửa</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: BÁO CÁO DOANH THU -->
+            <section id="tab-reports" class="tab-content" style="display: none;">
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <label for="reportRange"><strong>Khoảng thời gian:</strong></label>
+                        <select id="reportRange" style="padding:8px 10px; border:1px solid #ddd; border-radius:4px;">
+                            <option value="today">Hôm nay</option>
+                            <option value="7days">7 ngày qua</option>
+                            <option value="month">Tháng này</option>
+                            <option value="all">Tất cả</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="reportRevenue">0đ</h3>
+                        <p>Doanh thu (đã thanh toán)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="reportOrders">0</h3>
+                        <p>Số đơn đã thanh toán</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="reportAvg">0đ</h3>
+                        <p>Giá trị trung bình / đơn</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="reportCancelled">0</h3>
+                        <p>Đơn đã hủy</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 25px;">
+                    <h3><i class="fa-solid fa-calendar-days"></i> Doanh Thu Theo Ngày</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Số Đơn</th>
+                                <th>Doanh Thu</th>
+                                <th style="width:35%;">Biểu Đồ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportDayBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="card" style="margin-top: 25px;">
+                    <h3><i class="fa-solid fa-fire"></i> Món Bán Chạy</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Hạng</th>
+                                <th>Tên Món</th>
+                                <th>Số Lượng Bán</th>
+                                <th>Doanh Thu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTopBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB: QUẢN LÝ ĐƠN HÀNG -->
+            <section id="tab-orders" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3><i class="fa-solid fa-receipt"></i> Danh Sách Đơn Hàng</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Mã</th>
+                                <th>Khách Hàng</th>
+                                <th>Hình Thức</th>
+                                <th>Món Đã Đặt</th>
+                                <th>Tổng Tiền</th>
+                                <th>Thời Gian</th>
+                                <th>Trạng Thái</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB: TIN NHẮN LIÊN HỆ -->
+            <section id="tab-contacts" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3><i class="fa-solid fa-envelope"></i> Tin Nhắn Liên Hệ Từ Khách</h3>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Mã</th>
+                                <th>Người Gửi</th>
+                                <th>Liên Hệ</th>
+                                <th>Chủ Đề</th>
+                                <th>Nội Dung</th>
+                                <th>Thời Gian</th>
+                                <th>Trạng Thái</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 4: QUẢN LÝ TÀI KHOẢN -->
+            <section id="tab-users" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3><i class="fa-solid fa-users-gear"></i> Danh Sách Tài Khoản Trong Hệ Thống</h3>
+                    <p style="color: #666; font-size: 13px; margin: 10px 0;">Danh sách tài khoản trong hệ thống:</p>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ Và Tên</th>
+                                <th>Email / Tên Đăng Nhập</th>
+                                <th>Vai Trò</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js_admin.js"></script>
+</body>
+</html>

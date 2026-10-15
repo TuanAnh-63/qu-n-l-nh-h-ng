@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực Đơn Lẩu & Nướng</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Thư viện Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- File CSS riêng của dự án -->
+ <link rel="stylesheet" href="menu.css">
+
+</head>
+<body>
+ <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg header-navbar" aria-label="Main navigation">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <i class="fa-solid fa-fire-burner text-warning me-2 fs-3"></i>
+          <span>LẨU 4 MÙA</span>
+        </a> 
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Trang Chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="gioithieu.html">Giới Thiệu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="menu.html">Menu Lẩu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="datban.html">Đặt Bàn Lẩu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="lienhe.html">Liên Hệ</a>
+            </li>
+            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+              <a class="btn btn-custom-primary btn-sm" href="datban.html">
+                <i class="fa-solid fa-utensils me-1"></i> Đặt Bàn Ngay
+              </a>
+            </li>
+             
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <a class="btn btn-custom-outline btn-sm" href="login.html" title="Tài khoản">
+                <i class="fa-solid fa-user"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+    <!-- THANH DANH MỤC NGANG -->
+    <div class="navbar-container">
+        <nav class="navbar" id="navbar"></nav>
+    </div>
+
+    <!-- KHU VỰC HIỂN THỊ MÓN ĂN -->
+    <div class="container">
+        <div class="grid" id="product-grid"></div>
+    </div>
+
+    <!-- NÚT GIỎ HÀNG HỒNG NỔI GÓC DƯỚI PHẢI -->
+    <div class="cart-fab" id="cart-fab" onclick="toggleCartPanel(true)">
+        <svg viewBox="0 0 24 24">
+            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+        <div class="cart-badge" id="cart-badge">0</div>
+    </div>
+
+    <!-- BẢNG GIỎ HÀNG TRƯỢT TỪ PHẢI -->
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCartPanel(false)"></div>
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-panel-header">
+            <h3>Giỏ Hàng Của Bạn</h3>
+            <button class="close-cart-btn" onclick="toggleCartPanel(false)">&times;</button>
+        </div>
+        <div class="cart-items-container" id="cart-items-container"></div>
+        <div class="cart-panel-footer">
+            <div class="cart-total-row">
+                <span>Tổng tiền:</span>
+                <span class="cart-total-price" id="cart-total-price">0 ₫</span>
+            </div>
+            <div class="cart-customer">
+                <input type="text" id="orderName" placeholder="Họ và tên *" maxlength="60">
+                <input type="tel" id="orderPhone" placeholder="Số điện thoại *" maxlength="10">
+                <select id="orderType" onchange="onOrderTypeChange()">
+                    <option value="Tại quán">Ăn tại quán</option>
+                    <option value="Mang đi / Giao hàng">Mang đi / Giao hàng</option>
+                </select>
+                <input type="text" id="orderPlace" placeholder="Số bàn *" maxlength="120">
+                <input type="text" id="orderNote" placeholder="Ghi chú (không bắt buộc)" maxlength="200">
+            </div>
+            <button class="checkout-btn" onclick="checkout()">XÁC NHẬN ĐẶT HÀNG</button>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIẾT MÓN ĂN -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="modal-img" src="" onerror="if(this.getAttribute('src')&&typeof PLACEHOLDER_IMG!=='undefined'){this.onerror=null;this.src=PLACEHOLDER_IMG}">
+                </div>
+                <div class="modal-right">
+                    <h2 class="m-title" id="modal-title"></h2>
+                    <div class="m-price" id="modal-priceText"></div>
+                    
+                    <div class="m-options" id="modal-options"></div>
+
+                    <div class="m-actions">
+                        <div class="qty-box">
+                            <button onclick="changeModalQty(-1)">-</button>
+                            <input type="text" id="modal-qty" value="1" readonly>
+                            <button onclick="changeModalQty(1)">+</button>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart()">THÊM VÀO GIỎ HÀNG</button>
+                    </div>
+
+                    <div class="m-desc-text" id="modal-desc"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="menu.js"></script>
+</body>
+</html>
