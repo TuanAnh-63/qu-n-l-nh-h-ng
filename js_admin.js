@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     if (!localStorage.getItem('bookings')) {
-        localStorage.setItem('bookings', JSON.stringify(initialBookings));
+        localStorage.setItem('bookings', '[]');
     }
 
     // QUẢN LÝ BÀN (DỮ LIỆU)
@@ -441,6 +441,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const list = JSON.parse(localStorage.getItem('bookings'));
             return Array.isArray(list) ? list : [];
         } catch (e) { return []; }
+    }
+
+    // ĐỒNG BỘ ĐẶT BÀN VỚI FIRESTORE
+    let cloudBookingIds = [];
+
+    function saveBookings(list) {
+        localStorage.setItem('bookings', JSON.stringify(list));
+        if (!window.db) return;
+        const batch = db.batch();
+        list.forEach(b => batch.set(db.collection('bookings').doc(String(b.id)), b));
+        cloudBookingIds.forEach(id => {
+            if (!list.some(b => String(b.id) === id)) batch.delete(db.collection('bookings').doc(id));
+        });
+        batch.commit().catch(err => {
+            console.error('Không đồng bộ được đặt bàn lên Firestore:', err);
+            alert('Không lưu được lên máy chủ. Kiểm tra mạng hoặc quyền (rules) của Firestore!');
+        });
+    }
+
+    if (window.db) {
+        db.collection('bookings').orderBy('createdAt').onSnapshot(snap => {
+            const list = [];
+            cloudBookingIds = [];
+            snap.forEach(d => { list.push(d.data()); cloudBookingIds.push(d.id); });
+            localStorage.setItem('bookings', JSON.stringify(list));
+            renderTableList();
+            renderFloorList();
+            updateDashboardStats();
+        }, err => console.error('Lỗi đọc đặt bàn từ Firestore:', err));
     }
 
     function releaseTable(tables, tableName) {
@@ -547,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
         b.table = tableName || '';
         if (target && target.status === 'Trống') target.status = 'Đã đặt';
 
-        localStorage.setItem('bookings', JSON.stringify(bookings));
+        saveBookings(bookings);
         saveTables(tables);
         renderTableList();
         renderFloorList();
@@ -564,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveTables(tables);
                 item.table = '';
             }
-            localStorage.setItem('bookings', JSON.stringify(bookings));
+            saveBookings(bookings);
             renderTableList();
             renderFloorList();
             updateDashboardStats();
@@ -581,7 +610,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveTables(tables);
             }
             bookings = bookings.filter(b => b.id !== id);
-            localStorage.setItem('bookings', JSON.stringify(bookings));
+            saveBookings(bookings);
             renderTableList();
             renderFloorList();
             updateDashboardStats();
@@ -690,7 +719,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const bookings = readBookings();
         let changed = false;
         bookings.forEach(b => { if (b.table === t.name) { b.table = ''; changed = true; } });
-        if (changed) localStorage.setItem('bookings', JSON.stringify(bookings));
+        if (changed) saveBookings(bookings);
         renderFloorList();
         renderTableList();
     }
@@ -722,7 +751,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (oldName !== name) {
                     const bookings = readBookings();
                     bookings.forEach(b => { if (b.table === oldName) b.table = name; });
-                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    saveBookings(bookings);
                 }
             }
         } else {

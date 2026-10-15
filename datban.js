@@ -216,6 +216,49 @@ function saveBookingLocal(data) {
     }
 }
 
+// Kiểm tra trùng đơn (cùng SĐT + cùng khung giờ, chưa hủy) trên Firestore
+async function isDuplicateBooking(phone, datetime) {
+    if (!window.db) {
+        try {
+            const existing = JSON.parse(localStorage.getItem("bookings")) || [];
+            return existing.some((b) => b && b.phone === phone && b.datetime === datetime && b.status !== "Đã hủy");
+        } catch (e) { return false; }
+    }
+    const snap = await db.collection("bookings")
+        .where("phone", "==", phone)
+        .where("datetime", "==", datetime)
+        .get();
+    return snap.docs.some((d) => d.data().status !== "Đã hủy");
+}
+
+// Lưu đơn đặt bàn lên Firestore (admin ở máy nào cũng thấy)
+async function saveBookingCloud(data) {
+    // Chưa cấu hình Firebase => quay về lưu localStorage như bản demo cũ
+    if (!window.db) {
+        saveBookingLocal(data);
+        return;
+    }
+    const id = "DB" + Date.now();
+    const record = {
+        id: id,
+        name: data.fullname,
+        phone: data.phone,
+        datetime: `${data.time} - ${formatDate(data.date)}`,
+        guests: `${data.guests} Khách`,
+        status: "Chờ xác nhận",
+        email: data.email,
+        area: data.area,
+        note: data.note,
+        createdAt: Date.now(),
+    };
+    const timeout = new Promise((_, reject) => setTimeout(() => {
+        const err = new Error("timeout");
+        err.name = "AbortError";
+        reject(err);
+    }, REQUEST_TIMEOUT));
+    await Promise.race([db.collection("bookings").doc(id).set(record), timeout]);
+}
+
 function resetForm() {
     form.reset();
     guestsInput.value = DEFAULT_GUESTS;
@@ -264,23 +307,15 @@ form.addEventListener("submit", async (event) => {
         note: form.note.value,
     };
 
-    try {
-        const existing = JSON.parse(localStorage.getItem("bookings")) || [];
-        const dt = `${data.time} - ${formatDate(data.date)}`;
-        const duplicated = Array.isArray(existing) && existing.some(
-            (b) => b && b.phone === data.phone && b.datetime === dt && b.status !== "Đã hủy"
-        );
-        if (duplicated) {
-            showStatus("error", "Số điện thoại này đã có đơn đặt bàn vào đúng khung giờ này.");
-            return;
-        }
-    } catch (e) {}
-
     setLoading(true);
 
     try {
-        await sendData(data);
-        saveBookingLocal(data);
+        const dt = `${data.time} - ${formatDate(data.date)}`;
+        if (await isDuplicateBooking(data.phone, dt)) {
+            showStatus("error", "Số điện thoại này đã có đơn đặt bàn vào đúng khung giờ này.");
+            return;
+        }
+        await saveBookingCloud(data);
         showStatus(
             "success",
             `Đặt bàn thành công! ${data.guests} người, lúc ${data.time} ngày ${formatDate(data.date)}. ` +
