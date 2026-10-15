@@ -4,12 +4,12 @@
 // Dán các giá trị của bạn vào bên dưới.
 // ============================================
 const firebaseConfig = {
-    apiKey: "DÁN_API_KEY_VÀO_ĐÂY",
-    authDomain: "TEN-PROJECT.firebaseapp.com",
-    projectId: "TEN-PROJECT",
-    storageBucket: "TEN-PROJECT.appspot.com",
-    messagingSenderId: "DÁN_VÀO_ĐÂY",
-    appId: "DÁN_VÀO_ĐÂY"
+    apiKey: "AIzaSyCDIuIEUOaBdeb8hbZ9djhC0XQ9dl6JHL4",
+    authDomain: "lau4mua-dca09.firebaseapp.com",
+    projectId: "lau4mua-dca09",
+    storageBucket: "lau4mua-dca09.firebasestorage.app",
+    messagingSenderId: "243890608402",
+    appId: "1:243890608402:web:1f435a0dc9900154907bcb"
 };
 
 // Chỉ khởi tạo khi đã dán cấu hình thật. Nếu chưa, web chạy chế độ localStorage như cũ.
